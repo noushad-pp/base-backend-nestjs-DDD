@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+pnpm lint-staged
+
+# Do not run this command in lint-staged runner as it produces a lot of JS files and overrides tsconfig settings
+# https://github.com/okonet/lint-staged/issues/825
+pnpm tsc --noEmit
