@@ -37,7 +37,7 @@ help:
 .PHONY: develop test-e2e clean prepare-local
 
 develop:
-	@echo "TODO: setup docker" # @docker-compose up -d
+	@docker-compose up -d
 
 clean:
 	@docker-compose down
@@ -63,7 +63,7 @@ format:
 	@pnpm format
 
 lint:
-	@pnpm lint
+	@pnpm lint:fix
 
 audit:
 	@pnpm audit

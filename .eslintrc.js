@@ -9,11 +9,15 @@ module.exports = {
     '@typescript-eslint/eslint-plugin',
     'import',
     'simple-import-sort',
-    'unused-imports'
+    'unused-imports',
+    'jest',
+    'jest-formatting'
   ],
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
+    'plugin:jest/recommended',
+    'plugin:jest-formatting/recommended'
   ],
   root: true,
   env: {
@@ -22,6 +26,7 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    '@typescript-eslint/no-namespace': 'off',
     '@typescript-eslint/no-explicit-any': "off",
     'no-unused-vars': 'off', // disabled in favor of "unused-imports/no-unused-vars"
     '@typescript-eslint/no-unused-vars': 'off', // disabled in favor of "unused-imports/no-unused-vars",
@@ -31,7 +36,7 @@ module.exports = {
       'warn',
       {
         selector: 'default',
-        format: ['camelCase', 'UPPER_CASE'],
+        format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
         leadingUnderscore: 'allowSingleOrDouble',
       },
       {
@@ -87,12 +92,9 @@ module.exports = {
         format: ['camelCase', 'UPPER_CASE'],
       },
     ],
+
     // Disallow Unused Variables
     // https://eslint.org/docs/rules/no-unused-vars#options
-
-    // Find and remove unused es6 module imports.
-    // https://github.com/sweepline/eslint-plugin-unused-imports
-    'unused-imports/no-unused-imports': 'warn',
     'unused-imports/no-unused-vars': [
       'warn',
       {
@@ -104,23 +106,30 @@ module.exports = {
       },
     ],
 
+    // Find and remove unused es6 module imports.
+    // https://github.com/sweepline/eslint-plugin-unused-imports
+    'unused-imports/no-unused-imports': 'warn',
+
+
     // https://github.com/lydell/eslint-plugin-simple-import-sort
-    'simple-import-sort/imports': [
-      'warn',
+    "simple-import-sort/imports": [
+      "error",
       {
-        groups: [
+        "groups": [
           // Packages. (Things that start with a letter (or digit or underscore), or `@` followed by a letter.)
-          ['^@?\\w'],
+          [ "^@?\\w"],
+          // Internal packages.
+          ["^api/.*|$"],
+          ["^application/.*|$"],
+          ["^domain/.*|$"],
+          ["^shared-kernel/.*|$"],
+          ["^infrastructure/.*|$"],
           // Parent imports. Put `..` last.
-          ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
+          ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
           // Other relative imports. Put same-folder imports and `.` last.
-          ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
-          // Style imports.
-          ['^.+\\.s?css$'],
-          // Side effect imports. eg: import './style.css'
-          ['^\\u0000'],
-        ],
-      },
-    ],
+          ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+        ]
+      }
+    ]
   }
 };

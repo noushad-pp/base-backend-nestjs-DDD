@@ -1,5 +1,7 @@
 import { INestApplication } from '@nestjs/common';
-import { AppModule } from 'api/app.module';
+
+import { ApiModule } from 'api/api.module';
+
 import { CliRunner } from 'infrastructure/cli';
 
 async function preInitCallback(app: INestApplication): Promise<void> {
@@ -12,7 +14,7 @@ async function callback(app: INestApplication): Promise<void> {
 
 const runner = new CliRunner({
   name: 'api',
-  modules: [AppModule],
+  modules: [ApiModule],
   preInitCallback,
   callback,
 });

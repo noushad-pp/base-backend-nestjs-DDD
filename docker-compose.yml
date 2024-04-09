@@ -1,0 +1,35 @@
+# This file is meant to be used for local development purpose
+# ENV variables are populated using an environment file (.env)
+# Reference: https://docs.docker.com/compose/environment-variables/#the-env-file
+# Please note that ENV variables can leak from multiple places into this docker-compose file, consider reading
+# instructions in the .env file
+
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    ports:
+      - '3306:3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD=$DATABASE_PASSWORD
+      - MYSQL_DATABASE=$DATABASE_DATABASE
+    volumes:
+      - ./files/db-init:/docker-entrypoint-initdb.d:rw
+    user: mysql
+
+  api:
+    build: .
+    platform: linux/amd64
+    profiles:
+      - 'donotstart' # this is to avoid starting the container when running docker-compose up
+    environment:
+      NODE_PORT: 5555
+      DATABASE_HOST: db
+    volumes:
+      - .:/app
+    ports:
+      - '5555:5555'
+      - '9229:9229' #debug port
+    depends_on:
+      - db

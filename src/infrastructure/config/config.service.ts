@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { join } from 'path';
 
+import 'dotenv/config';
+
 // TODO: importing from infrastructure/logger is causing circular dependency and tests to fail
 import { LOGGER_LOG_LEVEL_MAP } from '../logger/log-levels';
 
 import { DatabaseConfig } from './types/database-config';
-
-import 'dotenv/config';
 
 @Injectable()
 export class ConfigService {
